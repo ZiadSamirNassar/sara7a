@@ -2,6 +2,7 @@ import { globalErrorHandler } from "./utils/index.js";
 import {connectDB} from "./DB/index.js";
 import * as appRoutes from "./modules/index.js";
 import rateLimit from "express-rate-limit";
+import config from "../config/dev.config.js";
 export default function bootstrap(app, express) {
 
     const apiLimiter = rateLimit({
@@ -17,7 +18,7 @@ export default function bootstrap(app, express) {
     app.use(express.json());
     app.use("/uploads", express.static("uploads"));
 
-    connectDB(process.env.DB_URI);
+    connectDB(config.DB_URI);
 
     //Routes
     app.use("/auth", appRoutes.authRouter);

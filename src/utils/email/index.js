@@ -1,13 +1,14 @@
 import {OTPTemplate} from "./email.page.js";
 import nodemailer from "nodemailer";
+import config from "../../config/dev.config.js";
 
 const sendEmail = async ({to, subject, html}) => {
     const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
+        host: config.EMAIL_HOST,
+        port: config.EMAIL_PORT,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
+            user: config.EMAIL_USER,
+            pass: config.EMAIL_PASSWORD,
         },
     });
 
