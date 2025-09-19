@@ -1,6 +1,6 @@
 import bootstrap from "./app.controller.js";
 import express from "express";
-import config from "./config/dev.config.js";
+import config from "../config/dev.config.js";
 
 const app = express();
 const port = config.PORT;

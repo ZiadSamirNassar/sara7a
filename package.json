@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "dev": "node --env-file ./config/local.env --watch ."
+    "dev": "node --watch ."
   },
   "keywords": [],
   "author": "",

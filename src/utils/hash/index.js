@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import config from "../../config/dev.config.js";
+import config from "../../../config/dev.config.js";
 
 export const hashPassword = async (password) => {
     return await bcrypt.hash(password, 10);

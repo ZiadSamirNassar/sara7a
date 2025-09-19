@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import config from "../../config/dev.config.js";
+import config from "../../../config/dev.config.js";
 
 export const encrypt = (data) => {
     return CryptoJS.AES.encrypt(data, config.CRYPTO_SECRET).toString();

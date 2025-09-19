@@ -1,6 +1,6 @@
 import {OTPTemplate} from "./email.page.js";
 import nodemailer from "nodemailer";
-import config from "../../config/dev.config.js";
+import config from "../../../config/dev.config.js";
 
 const sendEmail = async ({to, subject, html}) => {
     const transporter = nodemailer.createTransport({
