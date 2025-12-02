@@ -1,10 +1,10 @@
 import {userModel, tokenModel} from "../../DB/index.js";
-import {hashPassword, generateOtp, generateToken, comparePassword, sendOtpMail} from "../../utils/index.js";
+import {hashPassword, generateOtp, generateToken, comparePassword, sendOtpMail, encrypt} from "../../utils/index.js";
 import {OAuth2Client} from "google-auth-library";
 
 export const register = async (req, res) => {
     //get data from req.body
-    const { email, name, password } = req.body;
+    const { email, name, password, phone } = req.body;
     
 
     //check if user exists
@@ -16,6 +16,9 @@ export const register = async (req, res) => {
 
     //hash password
     const hashedPassword = await hashPassword(password);
+    //incrept phone
+    let encryptedPhone
+    if(phone) encryptedPhone = encrypt(phone)
 
     //generate otp
     const otp = generateOtp();
@@ -27,6 +30,7 @@ export const register = async (req, res) => {
         email,
         name,
         password: hashedPassword,
+        phone: encryptedPhone,
         otp,
         otpExpiry: Date.now() + 10 * 60 * 1000,//10 minutes
     });
@@ -45,7 +49,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     //get data from req
-    const { email, phone, password } = req.body;
+    const { email, password } = req.body;
 
     //check if user exists
     const userExists = await userModel.findOne({ email });
@@ -173,12 +177,22 @@ export const googleLogin = async (req, res) => {
         });
     }
     //generate token
-    const token = generateToken(userExists);
+    const accessToken = generateToken(userExists);
+    const refreshToken = generateToken(userExists, "7d");
+    //save refresh token to db
+    await tokenModel.create({
+        userId: userExists._id,
+        token: refreshToken,
+        type: "refresh"
+    });
 
     //send response
     res.status(200).json({ 
         message: "User logged in successfully",
-        token,
+        data:{
+            accessToken,
+            refreshToken,
+        },
         success: true
     });
 };

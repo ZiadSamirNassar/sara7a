@@ -5,12 +5,12 @@ export const registerSchema = JoiPoy.object({
     name: generateFields.name.required(),
     email: generateFields.email.required(),
     password: generateFields.password.required(),
+    phone: generateFields.phone
 });
 
 
 export const loginSchema = JoiPoy.object({
-    email: generateFields.email,
-    phone: generateFields.phone,
+    email: generateFields.email.required(),
     password: generateFields.password.required(),
 });
 

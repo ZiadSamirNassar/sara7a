@@ -3,6 +3,7 @@ import {connectDB} from "./DB/index.js";
 import * as appRoutes from "./modules/index.js";
 import rateLimit from "express-rate-limit";
 import config from "../config/dev.config.js";
+
 export default function bootstrap(app, express) {
 
     const apiLimiter = rateLimit({
