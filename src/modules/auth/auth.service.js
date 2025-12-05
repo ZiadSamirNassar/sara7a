@@ -4,7 +4,7 @@ import {OAuth2Client} from "google-auth-library";
 
 export const register = async (req, res) => {
     //get data from req.body
-    const { email, name, password, phone } = req.body;
+    const { email, name, password } = req.body;
     
 
     //check if user exists
@@ -16,9 +16,6 @@ export const register = async (req, res) => {
 
     //hash password
     const hashedPassword = await hashPassword(password);
-    //incrept phone
-    let encryptedPhone
-    if(phone) encryptedPhone = encrypt(phone)
 
     //generate otp
     const otp = generateOtp();
@@ -30,7 +27,6 @@ export const register = async (req, res) => {
         email,
         name,
         password: hashedPassword,
-        phone: encryptedPhone,
         otp,
         otpExpiry: Date.now() + 10 * 60 * 1000,//10 minutes
     });
@@ -39,9 +35,9 @@ export const register = async (req, res) => {
     res.status(201).json({ 
         message: "User registered successfully",
         data: {
-        id: newUser._id,
-        email: newUser.email,
-        name: newUser.name,
+            id: newUser._id,
+            email: newUser.email,
+            name: newUser.name,
         },
         success: true
     });
@@ -62,7 +58,7 @@ export const login = async (req, res) => {
         throw new Error("User not verified", { cause: 401 });
     }
     //check if password is correct
-    const passwordMatch = await comparePassword(password, userExists.password);
+    const passwordMatch = comparePassword(password, userExists.password);
     if (!passwordMatch) {
         throw new Error("Invalid password", { cause: 401 });
     }
@@ -164,7 +160,7 @@ export const googleLogin = async (req, res) => {
         audience: "144634045918-rm5ajbir3tdilji8t9r99dgr5sh2cl50.apps.googleusercontent.com",
     });
     const payload = ticket.getPayload();
-    const userId = payload.sub;
+    // const userId = payload.sub;
     //check if user exists
     let userExists = await userModel.findOne({ email: payload.email });
     if (!userExists) {

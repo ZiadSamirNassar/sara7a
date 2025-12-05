@@ -5,7 +5,6 @@ export const registerSchema = JoiPoy.object({
     name: generateFields.name.required(),
     email: generateFields.email.required(),
     password: generateFields.password.required(),
-    phone: generateFields.phone
 });
 
 
