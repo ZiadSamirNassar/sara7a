@@ -1,9 +1,10 @@
-import { globalErrorHandler } from "./utils/index.js";
-import {connectDB} from "./DB/index.js";
-import * as appRoutes from "./modules/index.js";
+import cors from "cors";
 import rateLimit from "express-rate-limit";
 import config from "../config/dev.config.js";
-import cors from "cors";
+import { connectDB } from "./DB/index.js";
+import { logger } from "./middleware/index.js";
+import * as appRoutes from "./modules/index.js";
+import { globalErrorHandler } from "./utils/index.js";
 
 export default function bootstrap(app, express) {
 
@@ -26,6 +27,7 @@ export default function bootstrap(app, express) {
     
     app.use(express.json());
     app.use("/uploads", express.static("uploads"));
+    app.use(logger);
     connectDB(config.DB_URI);
 
     //Routes
