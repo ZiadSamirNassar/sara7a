@@ -17,18 +17,12 @@ export const register = async (req, res) => {
     //hash password
     const hashedPassword = await hashPassword(password);
 
-    //generate otp
-    const otp = generateOtp();
-    //send email verification (sendOtp)
-    await sendOtpMail(email, otp);
     
     //create user
     const newUser = await userModel.create({
         email,
         name,
         password: hashedPassword,
-        otp,
-        otpExpiry: Date.now() + 10 * 60 * 1000,//10 minutes
     });
 
     //send response
