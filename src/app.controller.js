@@ -3,8 +3,16 @@ import {connectDB} from "./DB/index.js";
 import * as appRoutes from "./modules/index.js";
 import rateLimit from "express-rate-limit";
 import config from "../config/dev.config.js";
+import cors from "cors";
 
 export default function bootstrap(app, express) {
+
+    app.use(cors({
+        origin: config.FRONTEND_URLs,
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    }));
 
     const apiLimiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
@@ -18,7 +26,6 @@ export default function bootstrap(app, express) {
     
     app.use(express.json());
     app.use("/uploads", express.static("uploads"));
-
     connectDB(config.DB_URI);
 
     //Routes
