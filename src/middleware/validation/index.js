@@ -16,7 +16,7 @@ export const isValid = (schema) => {
 export const generateFields = {
     name: JoiPoy.string(),
     email: JoiPoy.string().email(),
-    phone: JoiPoy.string().length(11),
+    phone: JoiPoy.string().min(9).max(15),
     password: JoiPoy.string().min(6),
     otp: JoiPoy.string().length(6),
 };

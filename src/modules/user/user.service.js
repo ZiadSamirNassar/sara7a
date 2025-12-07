@@ -1,14 +1,22 @@
 import {userModel, tokenModel} from "../../DB/index.js";
 import cloudinary from "../../utils/cloud/cloudinary.config.js";
 import fs from "fs";
-
+import { decrypt } from "../../utils/index.js";
 
 export const profile = async (req,res) => {
     if(!req.user) throw new Error("not allawed user", {cause: 409})
-    
+
+    let phone;
+    if(req.user.phone){
+        phone = decrypt(req.user.phone);
+    }
+    let { isVerified, userAgent, credentialsUpdatedAt, password, ...user } = req.user._doc;
     res.status(200).json({
-        message: "User deleted successfully",
-        data: req.user,
+        message: "User details fetched successfully",
+        data: {
+            ...user,
+            phone
+        },
         success: true
     });
 }

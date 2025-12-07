@@ -4,6 +4,7 @@ import { generateFields } from "../../middleware/index.js";
 export const registerSchema = JoiPoy.object({
     name: generateFields.name.required(),
     email: generateFields.email.required(),
+    phone: generateFields.phone.optional(),
     password: generateFields.password.required(),
 });
 

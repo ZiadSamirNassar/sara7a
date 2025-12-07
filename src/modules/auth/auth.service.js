@@ -4,7 +4,7 @@ import {OAuth2Client} from "google-auth-library";
 
 export const register = async (req, res) => {
     //get data from req.body
-    const { email, name, password } = req.body;
+    const { email, name, phone, password } = req.body;
     
 
     //check if user exists
@@ -14,15 +14,16 @@ export const register = async (req, res) => {
         throw new Error("User already exists", { cause: 409 });
     }
 
-    //hash password
+    //hash password & encrypt phone
     const hashedPassword = await hashPassword(password);
-
+    const encryptedPhone = encrypt(phone);
     
     //create user
     const newUser = await userModel.create({
         email,
         name,
         password: hashedPassword,
+        phone: encryptedPhone,
     });
 
     //send response
@@ -30,8 +31,7 @@ export const register = async (req, res) => {
         message: "User registered successfully",
         data: {
             id: newUser._id,
-            email: newUser.email,
-            name: newUser.name,
+            email, name, phone,
         },
         success: true
     });
@@ -147,11 +147,11 @@ export const googleLogin = async (req, res) => {
     //get idToken from req
     const { idToken } = req.body;
     //create client
-    const client = new OAuth2Client("144634045918-rm5ajbir3tdilji8t9r99dgr5sh2cl50.apps.googleusercontent.com");
+    const client = new OAuth2Client("283113959654-2e506m15udir05v41vbb7evp97cv4b3c.apps.googleusercontent.com");
     //verify idToken
     const ticket = await client.verifyIdToken({
         idToken,
-        audience: "144634045918-rm5ajbir3tdilji8t9r99dgr5sh2cl50.apps.googleusercontent.com",
+        audience: "283113959654-2e506m15udir05v41vbb7evp97cv4b3c.apps.googleusercontent.com",
     });
     const payload = ticket.getPayload();
     // const userId = payload.sub;

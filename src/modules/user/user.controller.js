@@ -5,7 +5,7 @@ import {isAuthenticated, fileValidation} from "../../middleware/index.js";
 
 const router = Router();
 
-router.get("/profile", (req,res) => {})
+router.get("/profile", asyncHandler(isAuthenticated), asyncHandler(userService.profile));
 
 router.delete("/delete-profile", asyncHandler(isAuthenticated), asyncHandler(userService.deleteProfile));
 
